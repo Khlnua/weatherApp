@@ -1,9 +1,46 @@
 "use client";
 import React from "react";
+import { useState, useEffect } from "react";
 import { City } from "./components/City";
 import { Heart, House, MapPin, Search, User } from "lucide-react";
+import axios from "axios";
 
 const page = () => {
+  const [search, setSearch] = useState("");
+  const [suggest, setSuggest] = useState([]);
+  const [weather, setWeather] = useState(null);
+
+  const weatherApiKey = process.env.WEATHERAPIKEY;
+
+  useEffect(() => {
+    const weatherOfUb = async () => {
+      const {data} = await axios("https://api.weatherapi.com/v1/forecast.json?key=${weatherApiKey}&q=Ulaanbaatar,Mongolia");
+      setWeather(weatherOfUb.data);
+    };
+    weatherOfUb()
+  }, [])
+
+  const handleSearch = async (event) => {
+    setSearch(event.target.value);
+
+      const response = await axios.get('https://countriesnow.space/api/v0.1/countries');
+      const data = response.data.data;
+
+      const cities = data.flatMap(country => country.cities);
+      const matches = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
+      
+      setSuggest(matches);
+  }
+
+  const handleCitySelect = async (cityName) => {
+    
+      const weatherResponse = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${weatherApiKey}&q=${cityName}`);
+      setWeather(weatherResponse.data);
+      setSearch(cityName);
+      setSuggest([]); 
+    
+  };
+
   return (
     <div className="relative">
       <div className="w-screen h-screen">
@@ -50,9 +87,19 @@ const page = () => {
         <Search className="w-12 h-12 text-black opacity-[0.5]" />
         <input
           type="search"
+          value={search}
           placeholder="Search"
+          onChange={handleSearch}
           className="font-bold text-[32px]  text-black opacity-[0.8] "
         />
+
+        <ul>
+        {suggest.map((city, index) => (
+          <li key={index} onClick={() => handleCitySelect(city)}>
+            {city}
+          </li>
+        ))}
+        </ul>
       </div>
 
       <div className="w-102 h-205 absolute top-32 left-70 z-10 backdrop-blur-[12px] bg-white/35 flex flex-col justify-around rounded-[48px] items-center">
@@ -62,7 +109,7 @@ const page = () => {
               April 8, 2025
             </p>
             <p className="text-[48px] font-extrabold text-[#111827]">
-              Ulaanbaatar
+             {weather.location.name}
             </p>
           </div>
           <MapPin className="w-8 h-8 text-gray-500 my-5 mx-5" />
@@ -83,9 +130,9 @@ const page = () => {
 
         <div>
           <p className="text-[144px] font-extrabold bg-gradient-to-b from-[#111827] to-[#6B7280] bg-clip-text text-transparent">
-            11.2°
+          {weather.current.temp_c} °C
           </p>
-          <p className="text-[24px] text-[#FF8E27] font-extrabold ">Cloudy</p>
+          <p className="text-[24px] text-[#FF8E27] font-extrabold ">{weather.current.condition.text}</p>
         </div>
 
         <div className="flex w-80 justify-between mb-5 ">
