@@ -40,7 +40,7 @@ export const SearchCity = () => {
         {foundCities.map((city, index) => (
           <li
             className="flex h-14 px-6 gap-4 items-center text-black font-bold text-[24px]"
-            key={index}
+            key={index} 
           >
             <MapPin />
             {city.charAt(0).toUpperCase() + city.slice(1)}
