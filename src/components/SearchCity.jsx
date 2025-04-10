@@ -2,24 +2,25 @@ import { MapPin, Search } from "lucide-react";
 import { useCountries } from "@/hook/useCountries";
 import { useState } from "react";
 
-export const SearchCity = () => {
+export const SearchCity = ({ setSelectedCity }) => {
   const { countriesWithCities } = useCountries();
   const [inputValue, setInputValue] = useState("");
-  const [foundCities, setFoundCities] = useState([]);
+  const [cities, setCities] = useState([]);
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
 
-    const value = event.target.value.toLowerCase();
-
     const filteredCities = countriesWithCities
-      .filter((city) => city.startsWith(value))
+      .filter((city) => city.toLowerCase().startsWith(inputValue.toLowerCase()))
       .slice(0, 5);
 
-    setFoundCities(filteredCities);
+    setCities(filteredCities);
   };
 
-  console.log(foundCities);
+  const handleSelectCity = (cityName) => {
+    setSelectedCity(cityName);
+    setInputValue("");
+  };
 
   return (
     <div
@@ -36,17 +37,26 @@ export const SearchCity = () => {
         className="font-bold text-[32px]  text-black opacity-[0.8] "
       />
 
-      <ul className="flex absolute top-22 -left-0 w-128 flex-col py-4 items-start rounded-3xl bg-white/80 gap-1 ">
-        {foundCities.map((city, index) => (
-          <li
-            className="flex h-14 px-6 gap-4 items-center text-black font-bold text-[24px]"
-            key={index} 
-          >
-            <MapPin />
-            {city.charAt(0).toUpperCase() + city.slice(1)}
-          </li>
-        ))}
-      </ul>
+      {inputValue && Boolean(cities.length) && (
+        <ul className="flex absolute top-22 -left-0 w-128 flex-col items-start rounded-3xl bg-white/80 gap-1 ">
+          {cities.map((city, index) => (
+            <li
+              className="flex w-full h-14 px-6 gap-4 items-center text-black font-bold text-[24px] cursor-pointer hover:bg-slate-200 transition duration-300 rounded-sm"
+              key={index}
+              onClick={() => handleSelectCity(city)}
+            >
+              <MapPin />
+              {city
+                .split(", ")
+                .map(
+                  (splitted) =>
+                    splitted.charAt(0).toUpperCase() + splitted.slice(1)
+                )
+                .join(", ")}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

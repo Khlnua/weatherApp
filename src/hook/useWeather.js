@@ -4,32 +4,36 @@ import { useState, useEffect } from "react";
 export const useWeather = () => {
   const [selectedCity, setSelectedCity] = useState("Ulaanbaatar");
   const [weather, setWeather] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const weatherApiKey = "5e721b1f5f6d4b04ae923111250704";
+    const weatherApiKey = process.env.WEATHERAPIKEY;
+    setLoading(true);
 
     async function fetchWeatherData() {
       try {
         const response = await fetch(
           `https://api.weatherapi.com/v1/forecast.json?key=${weatherApiKey}&q=${selectedCity}`
-     );
+        );
 
-     const data = await response.json();
+        const data = await response.json();
         setWeather(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Error fetching weather data:", error);
       }
     }
-  
+
     fetchWeatherData();
-} , []);
+    setLoading(false);
+  }, [selectedCity]);
 
-console.log(weather, "weather");
+  console.log(weather, "weather");
 
-return {
+  console.log(loading, "loading");
+
+  return {
     weather,
     setSelectedCity,
+    loading,
   };
 };
-
