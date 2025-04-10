@@ -16,7 +16,7 @@ const page = () => {
       <MainDesign />
       <SearchCity setSelectedCity={setSelectedCity} />
       <WeatherOfDay weather={weather} loading={loading} />
-      <WeatherOfNight weather={weather} />
+      <WeatherOfNight weather={weather} loading={loading} />
     </div>
   );
 };
