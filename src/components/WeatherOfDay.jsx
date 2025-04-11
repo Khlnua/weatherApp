@@ -2,11 +2,11 @@ import { Heart, House, MapPin, User } from "lucide-react";
 
 export const WeatherOfDay = ({ weather, loading }) => {
   return (
-    <div>
+    <div className="absolute -left-65 top-0 ">
       {loading ? (
         <div className="border-4 rounded-full animate-spin"> </div>
       ) : (
-        <div className="w-102 h-205 absolute top-32 left-70 z-10 backdrop-blur-[12px] bg-white/35 flex flex-col justify-around rounded-[48px] items-center">
+        <div className="w-102 h-205 absolute top-32 left-130 z-10 backdrop-blur-[12px] bg-white/35 flex flex-col justify-around rounded-[48px] items-center">
           <div className="flex mt-5 ">
             <div className="flex flex-col">
               <p className="text-[18px] font-medium text-[#9CA3AF]">

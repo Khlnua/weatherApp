@@ -2,7 +2,7 @@ import { Heart, House, MapPin, User } from "lucide-react";
 
 export const WeatherOfNight = ({ weather, loading }) => {
   return (
-    <div>
+    <div className="absolute -left-95 top-0 ">
       {loading ? (
         <div className="border-4 rounded-full animate-spin "> </div>
       ) : (
